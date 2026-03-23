@@ -3,6 +3,7 @@ import { useChat } from "@/hooks/use-chat";
 import { Spinner } from "../ui/spinner";
 import ChatListItem from "./chat-list-item";
 import { useNavigate } from "react-router-dom";
+import useChatId from "@/hooks/use-chat-id";
 import { useAuth } from "@/hooks/use-auth";
 import ChatListHeader from "./chat-list-header";
 import { useSocket } from "@/hooks/use-socket";
@@ -12,6 +13,7 @@ import { MessageCircle } from "lucide-react";
 
 const ChatList = () => {
   const navigate = useNavigate();
+  const activeChatId = useChatId();
   const { socket } = useSocket();
   const {
     fetchChats,
@@ -39,6 +41,14 @@ const ChatList = () => {
   useEffect(() => {
     fetchChats();
   }, [fetchChats]);
+
+  useEffect(() => {
+    if (isChatsLoading) return;
+    if (activeChatId) return;
+    const first = chats[0];
+    if (!first) return;
+    navigate(`/chat/${first._id}`, { replace: true });
+  }, [isChatsLoading, activeChatId, chats, navigate]);
 
   useEffect(() => {
     if (!socket) return;

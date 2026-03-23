@@ -44,17 +44,35 @@ const ChatFooter = ({
     },
   });
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+  const loadImageFromFile = (file: File) => {
     if (!file.type.startsWith("image/")) {
       toast.error("Please select an image file");
       return;
     }
-
     const reader = new FileReader();
     reader.onloadend = () => setImage(reader.result as string);
     reader.readAsDataURL(file);
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    loadImageFromFile(file);
+  };
+
+  const handleMessagePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+    if (isSendingMsg) return;
+    const items = e.clipboardData?.items;
+    if (!items?.length) return;
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (item.kind !== "file" || !item.type.startsWith("image/")) continue;
+      const file = item.getAsFile();
+      if (!file) continue;
+      e.preventDefault();
+      loadImageFromFile(file);
+      return;
+    }
   };
 
   const handleRemoveImage = () => {
@@ -206,6 +224,7 @@ const ChatFooter = ({
                     autoComplete="off"
                     placeholder="Type new message"
                     className="min-h-[40px] bg-background"
+                    onPaste={handleMessagePaste}
                   />
                 </FormItem>
               )}
