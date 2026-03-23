@@ -4,12 +4,15 @@ import { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
+import EmojiPicker, { type EmojiClickData, Theme } from "emoji-picker-react";
 import { Button } from "../ui/button";
-import { Paperclip, Send, X } from "lucide-react";
+import { Paperclip, Send, Smile, X } from "lucide-react";
 import { Form, FormField, FormItem } from "../ui/form";
 import { Input } from "../ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import ChatReplyBar from "./chat-reply-bar";
 import { useChat } from "@/hooks/use-chat";
+import { cn } from "@/lib/utils";
 
 interface Props {
   chatId: string | null;
@@ -30,7 +33,9 @@ const ChatFooter = ({
   const { sendMessage, isSendingMsg } = useChat();
 
   const [image, setImage] = useState<string | null>(null);
+  const [emojiOpen, setEmojiOpen] = useState(false);
   const imageInputRef = useRef<HTMLInputElement | null>(null);
+  const messageInputRef = useRef<HTMLInputElement | null>(null);
 
   const form = useForm({
     resolver: zodResolver(messageSchema),
@@ -55,6 +60,26 @@ const ChatFooter = ({
   const handleRemoveImage = () => {
     setImage(null);
     if (imageInputRef.current) imageInputRef.current.value = "";
+  };
+
+  const insertEmoji = (emoji: string) => {
+    const input = messageInputRef.current;
+    const current = form.getValues("message") ?? "";
+    const start = input?.selectionStart ?? current.length;
+    const end = input?.selectionEnd ?? current.length;
+    const next = current.slice(0, start) + emoji + current.slice(end);
+    form.setValue("message", next, { shouldDirty: true });
+    requestAnimationFrame(() => {
+      if (!input) return;
+      const pos = start + emoji.length;
+      input.focus();
+      input.setSelectionRange(pos, pos);
+    });
+  };
+
+  const handleEmojiSelect = (data: EmojiClickData) => {
+    insertEmoji(data.emoji);
+    setEmojiOpen(false);
   };
 
   const onSubmit = (values: { message?: string }) => {
@@ -133,6 +158,38 @@ const ChatFooter = ({
                 ref={imageInputRef}
                 onChange={handleImageChange}
               />
+              <Popover open={emojiOpen} onOpenChange={setEmojiOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    disabled={isSendingMsg}
+                    className="rounded-full"
+                    aria-label="Open emoji picker"
+                  >
+                    <Smile className="h-4 w-4" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent
+                  side="top"
+                  align="start"
+                  sideOffset={8}
+                  className={cn(
+                    "w-auto border-0 bg-transparent p-0 shadow-none",
+                    "z-[1000]"
+                  )}
+                >
+                  <EmojiPicker
+                    theme={Theme.AUTO}
+                    width={320}
+                    height={400}
+                    onEmojiClick={handleEmojiSelect}
+                    searchPlaceHolder="Search emoji"
+                    previewConfig={{ showPreview: false }}
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
             <FormField
               control={form.control}
@@ -142,6 +199,10 @@ const ChatFooter = ({
                 <FormItem className="flex-1">
                   <Input
                     {...field}
+                    ref={(el) => {
+                      field.ref(el);
+                      messageInputRef.current = el;
+                    }}
                     autoComplete="off"
                     placeholder="Type new message"
                     className="min-h-[40px] bg-background"
