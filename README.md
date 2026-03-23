@@ -1,5 +1,9 @@
 <p align="center">
-  <img src="https://res.cloudinary.com/dywhwi0ce/image/upload/v1774233944/fbpnhl6etlwfebz36ifj.png" alt="Whop — application preview" width="720" />
+  <img src="https://res.cloudinary.com/dywhwi0ce/image/upload/v1774237689/Screenshot_2026-03-23_104959_z3rm2e.png" alt="Whop — application preview" width="720" />
+</p>
+
+<p align="center">
+  <img src="https://res.cloudinary.com/dywhwi0ce/image/upload/v1774237640/Screenshot_2026-03-23_104900_lpfe3u.png" alt="Whop — application preview" width="720" />
 </p>
 
 <p align="center">
