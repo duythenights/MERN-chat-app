@@ -7,6 +7,7 @@ interface LogoProps {
   showText?: boolean;
   imgClass?: string;
   textClass?: string;
+  className?: string;
 }
 
 const Logo = ({
@@ -14,8 +15,9 @@ const Logo = ({
   showText = true,
   imgClass = "size-[30px]",
   textClass,
+  className,
 }: LogoProps) => (
-  <Link to={url} className="flex items-center gap-2 w-fit">
+  <Link to={url} className={cn("flex w-fit items-center gap-2", className)}>
     <img src={logoSvg} alt="Whop" className={cn(imgClass)} />
     {showText && (
       <span className={cn("font-semibold text-lg leading-tight", textClass)}>

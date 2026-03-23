@@ -124,3 +124,14 @@ hody {
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .font-chat-ui {
+    font-family:
+      "Inter",
+      "DM Sans",
+      ui-sans-serif,
+      system-ui,
+      sans-serif;
+  }
+}

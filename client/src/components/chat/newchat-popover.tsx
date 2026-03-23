@@ -85,11 +85,11 @@ export const NewChatPopover = memo(() => {
       <PopoverTrigger asChild>
         <Button
           onClick={() => setIsOpen(true)}
-          variant="ghost"
+          variant="outline"
           size="icon"
-          className="h-8 w-8"
+          className="font-chat-ui size-9 shrink-0 rounded-full border border-neutral-200 bg-white text-[#111827] shadow-md transition-all hover:bg-neutral-50 hover:shadow-lg active:scale-95 dark:border-white/15 dark:bg-zinc-800 dark:text-zinc-100 dark:hover:bg-zinc-700"
         >
-          <PenBoxIcon className="!h-5 !w-5 !stroke-1" />
+          <PenBoxIcon className="!size-[1.05rem] !stroke-[1.35]" />
         </Button>
       </PopoverTrigger>
       <PopoverContent

@@ -15,7 +15,7 @@ const AppLayout = () => {
         </div>
         <div
           className={cn(
-            "lg:!pl-95 pl-7",
+            "pl-7 lg:!pl-[calc(3rem+379px)]",
             !chatId ? "hidden lg:block" : "block"
           )}
         >

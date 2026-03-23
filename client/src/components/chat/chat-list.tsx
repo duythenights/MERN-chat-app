@@ -8,6 +8,7 @@ import ChatListHeader from "./chat-list-header";
 import { useSocket } from "@/hooks/use-socket";
 import type { ChatType } from "@/types/chat.type";
 import type { MessageType } from "../../types/chat.type";
+import { MessageCircle } from "lucide-react";
 
 const ChatList = () => {
   const navigate = useNavigate();
@@ -77,36 +78,26 @@ const ChatList = () => {
   };
 
   return (
-    <div
-      className="fixed inset-y-0
-      pb-20 lg:pb-0
-      lg:max-w-[379px]
-      lg:block
-      border-r
-      border-border
-      bg-sidebar
-      max-w-[calc(100%-40px)]
-      w-full
-      left-10
-      z-[98]
-    "
-    >
-      <div className="flex-col">
+    <div className="font-chat-ui fixed inset-y-0 left-12 z-[98] flex w-full max-w-[calc(100%-3rem)] flex-col border-r border-[#E8EAED] bg-white pb-20 shadow-[1px_0_0_rgba(15,23,42,0.04)] dark:border-white/10 dark:bg-zinc-900 dark:shadow-none lg:max-w-[379px] lg:pb-0">
+      <div className="flex min-h-0 flex-1 flex-col">
         <ChatListHeader onSearch={setSearchQuery} />
 
-        <div
-          className="
-         flex-1 h-[calc(100vh-100px)]
-         overflow-y-auto        "
-        >
-          <div className="px-2 pb-10 pt-1 space-y-1">
+        <div className="relative min-h-0 flex-1 overflow-y-auto bg-[linear-gradient(180deg,#FFFFFF_0%,#FAFBFC_55%,#F4F5F7_100%)] dark:bg-[linear-gradient(180deg,oklch(0.21_0.006_285.885)_0%,oklch(0.18_0.006_285.885)_100%)]">
+          <div className="min-h-[min(320px,45vh)] space-y-0.5 px-3 pb-12 pt-2 md:space-y-1 md:px-3.5 md:pt-3">
             {isChatsLoading ? (
-              <div className="flex items-center justify-center">
-                <Spinner className="w-7 h-7" />
+              <div className="flex items-center justify-center py-16">
+                <Spinner className="h-7 w-7 text-violet-600" />
               </div>
             ) : filteredChats?.length === 0 ? (
-              <div className="flex items-center justify-center">
-                {searchQuery ? "No chat found" : "No chats created"}
+              <div className="flex flex-col items-center justify-center gap-3 px-4 py-16 text-center">
+                <div className="flex size-14 items-center justify-center rounded-2xl bg-violet-100/80 text-violet-600 dark:bg-violet-950/50 dark:text-violet-400">
+                  <MessageCircle className="size-7 stroke-[1.25]" />
+                </div>
+                <p className="max-w-[220px] text-sm font-medium text-[#374151] dark:text-zinc-300">
+                  {searchQuery
+                    ? "No conversations match your search."
+                    : "Start a conversation — your chats will show up here."}
+                </p>
               </div>
             ) : (
               filteredChats?.map((chat) => (

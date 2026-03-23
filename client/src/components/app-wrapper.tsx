@@ -8,7 +8,7 @@ const AppWrapper = ({ children }: Props) => {
   return (
     <div className="h-full">
       <AsideBar />
-      <main className="lg:pl-10 h-full">{children}</main>
+      <main className="h-full lg:pl-12">{children}</main>
     </div>
   );
 };
